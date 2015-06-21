@@ -1,6 +1,6 @@
 int Senval=0;
-
 int Senpin=A0;
+int i = 0;
 
 void setup()
 {
@@ -15,16 +15,26 @@ void loop()
 
     Senval=analogRead(Senpin);
     Serial.println(Senval); //Print resistance
+    Serial.println(i);
     delay(200);
+    i+=1; //Sets buzzer counter
     
-    if (Senval >= 50) //Adjust for weight reading
+    if (Senval >= 50 && i <= 20) //Adjust for weight reading
     {
-    digitalWrite(11, LOW); //Green Led
-    digitalWrite(10, HIGH); //Red Led
+      digitalWrite(11, LOW); //Green LED
+      digitalWrite(10, HIGH); //Red LED
+      digitalWrite(12, LOW); //Turns buzzer input to OFF
+    }
+    else if (Senval >= 50 && i >= 20)
+    {
+      digitalWrite(12, HIGH); //Sounds Buzzer after 2 hours
+      digitalWrite(10, HIGH); //Red LED
     }
     else
     {
-    digitalWrite(11, HIGH); //Green Led
-    digitalWrite(10, LOW); //Red Led
-    }    
+      digitalWrite(11, HIGH); //Green LED
+      digitalWrite(10, LOW); //Red LED
+      digitalWrite(12, LOW); //Turns buzzer input to OFF
+      i = 0; //Resets buzzer counter
+    }
 }
