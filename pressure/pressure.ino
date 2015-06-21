@@ -14,11 +14,10 @@ void loop()
 {
 
     Senval=analogRead(Senpin);
-    Senval -= 0;
-    Serial.println(Senval);
+    Serial.println(Senval); //Print resistance
     delay(200);
     
-    if (Senval >= 200) //Adjust for weight reading
+    if (Senval >= 50) //Adjust for weight reading
     {
     digitalWrite(11, LOW); //Green Led
     digitalWrite(10, HIGH); //Red Led
