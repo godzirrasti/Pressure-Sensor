@@ -10,9 +10,9 @@ int i = 0;
 void setup()
 {
     Serial.begin(9600);
-    pinMode(10, OUTPUT); //Red Led
-    pinMode(11, OUTPUT); //Green Led
-    pinMode(12, OUTPUT); //Buzzer
+    pinMode(redLedPin, OUTPUT); //Red Led
+    pinMode(greenLedPin, OUTPUT); //Green Led
+    pinMode(buzzerPin, OUTPUT); //Buzzer
 }
 
 void loop()
