@@ -14,7 +14,7 @@ void loop()
 {
 
     Senval=analogRead(Senpin);
-    Senval -= 115;
+    Senval -= 0;
     Serial.println(Senval);
     delay(200);
     
