@@ -1,29 +1,35 @@
+/*
+ * Designed to be used in conjuction with a "PM cart". Demonstrates the ability to read force resistor data to determine if
+ * the part assigned to the drawer is empty. 
+ * 
+ * Created 7/1/15 by Kevin Halliwell
+ */
+
+
+
 //Libraries
 #include <SD.h>
 #include <SPI.h>
 
-//Define pin values.
+//Define pin values
 #define redLedPin 2 //Red LED
 #define greenLedPin 3 //Green LED
 #define buzzerPin 4 //Buzzer
-#define weightValue 100 //Adjusted so sensor does not read randomly
+#define weightValue 100 //Sensor adjustment to eliminate false readings
 #define countTo 20 //Time count
+
+//Define variables
 int Senval=0; //Sensor Value
 int Senpin=A0; //Sensor read pin
 int i = 0; //Counter
 int chipSelect = 10;
 int pow_pin = 8;
-File dataFile;
+
 
 //Yellow wire is +5v, Red wire is read pin A0, Black wire is ground
 //Led lights use the same ground. 
 //Need to label led and buzzer wire
 
-
-//Datalogging pins
-//13 SPI clock
-//12 MISO 
-//11 MOSI
 
 void setup()
 {
@@ -47,15 +53,11 @@ void loop()
     //Start string for data log
     String dataString = "";
 
-    //Assign sensor readings to a variable
+    //Read sensor data from A0 pin
     Senval=analogRead(Senpin);
 
-    //Original print for testing
-    Serial.println("R value:"); //Print resistance
-    Serial.println(Senval);
-    Serial.println("Time: "); //Print time value
-    Serial.println(i);
-    delay(200);
+    //Delay serial and set the counter
+    delay(1000);
     i+=1; //Sets buzzer counter
     
     if (Senval >= weightValue && i <= countTo) //Adjust for weight reading
@@ -84,18 +86,24 @@ void loop()
       i = 0; //Resets buzzer counter
     }
 
-    //Open the file
-    dataFile = SD.open("Datalog.txt", FILE_WRITE);
+    //Create .txt file on the SD card
+    File dataFile = SD.open("Data.txt", FILE_WRITE);
     
     //Print if the file is available
     if (dataFile) {
       dataFile.println(dataString);
       dataFile.close();
+      Serial.println(dataString);
       Serial.println("File successfully written!");
     }
     else {
       Serial.println("Error opening file");
     }
-    
-    
+
+    //Testing output for SD card and serial monitor.
+    Serial.println("R value:"); //Print resistance
+    Serial.println(Senval);
+    Serial.println("Time: "); //Print time value
+    Serial.println(i);
+
 }
