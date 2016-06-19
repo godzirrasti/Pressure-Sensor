@@ -13,7 +13,6 @@ int Senpin=A0; //Sensor read pin
 int i = 0; //Counter
 int chipSelect = 10;
 int pow_pin = 8;
-String dataString = "";
 File dataFile;
 
 //Yellow wire is +5v, Red wire is read pin A0, Black wire is ground
@@ -46,24 +45,10 @@ void setup()
 void loop()
 {
     //Start string for data log
-    //String dataString = "";
+    String dataString = "";
 
     //Assign sensor readings to a variable
     Senval=analogRead(Senpin);
-
-    //Open the file
-    dataFile = SD.open("Datalog.txt", FILE_WRITE);
-    int dataInt = (Senval);
-    
-    //Print if the file is available
-    if (dataFile) {
-      dataFile.println(dataInt);
-      dataFile.close();
-      Serial.println("File successfully written!");
-    }
-    else {
-      Serial.println("Error opening file");
-    }
 
     //Original print for testing
     Serial.println("R value:"); //Print resistance
@@ -78,22 +63,38 @@ void loop()
       digitalWrite(greenLedPin, LOW); //Green LED
       digitalWrite(redLedPin, HIGH); //Red LED
       digitalWrite(buzzerPin, LOW); //Turns buzzer input to OFF
-      //dataString += "Red LED set to ON, Sensor: " + dataInt;
+      dataString += "Red LED set to ON, Sensor: " + String(Senval);
+      Serial.println(dataString);
     }
     else if (Senval >= weightValue && i >= countTo)
     {
       digitalWrite(buzzerPin, HIGH); //Sounds Buzzer after 2 hours
       digitalWrite(redLedPin, HIGH); //Red LED
       digitalWrite(greenLedPin, LOW); //Green LED
-      //dataString += "Green LED set to ON, Sensor: " + dataInt;
+      dataString += "Green LED set to ON, Sensor: " + String(Senval);
+      Serial.println(dataString);
     }
     else
     {
       digitalWrite(greenLedPin, HIGH); //Green LED
       digitalWrite(redLedPin, LOW); //Red LED
       digitalWrite(buzzerPin, LOW); //Turns buzzer input to OFF
-      //dataString += "Green LED set to ON, Sensor: " + dataInt;
+      dataString += "Green LED set to ON, Sensor: " + String(Senval);
+      Serial.println(dataString);
       i = 0; //Resets buzzer counter
+    }
+
+    //Open the file
+    dataFile = SD.open("Datalog.txt", FILE_WRITE);
+    
+    //Print if the file is available
+    if (dataFile) {
+      dataFile.println(dataString);
+      dataFile.close();
+      Serial.println("File successfully written!");
+    }
+    else {
+      Serial.println("Error opening file");
     }
     
     
