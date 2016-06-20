@@ -45,7 +45,8 @@ void setup()
       Serial.println("SD card not present or failed to load");
       return;
     }
-    Serial.println("SD card initialized");
+    else
+      Serial.println("SD card initialized");
 }
 
 void loop()
